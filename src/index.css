@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* DataPrint AR Design System - Professional inventory & petty cash management */
+
+@layer base {
+  :root {
+    /* Primary - Deep Blue */
+    --primary: 211 100% 34%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 211 100% 28%;
+    
+    /* Secondary - Vibrant Coral */
+    --secondary: 352 100% 66%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 352 100% 60%;
+    
+    /* Backgrounds */
+    --background: 214 20% 98%;
+    --foreground: 217 33% 12%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 217 33% 12%;
+    
+    /* Muted & Accents */
+    --muted: 214 20% 96%;
+    --muted-foreground: 220 9% 46%;
+    
+    --accent: 214 20% 96%;
+    --accent-foreground: 217 33% 12%;
+    
+    /* Table specific */
+    --table-border: 220 13% 91%;
+    --table-header: 217 33% 12%;
+    --table-row-alt: 0 0% 98%;
+    
+    /* Inputs & Borders */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 211 100% 34%;
+    
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 217 33% 12%;
+    
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    
+    /* Border radius */
+    --radius: 0.75rem;
+    --radius-sm: 0.5rem;
+    --radius-lg: 1rem;
+    
+    /* Transitions */
+    --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 217 33% 8%;
+    --foreground: 0 0% 98%;
+    
+    --card: 217 33% 12%;
+    --card-foreground: 0 0% 98%;
+    
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 211 100% 45%;
+    
+    --secondary: 352 100% 66%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 352 100% 60%;
+    
+    --muted: 217 33% 16%;
+    --muted-foreground: 220 9% 65%;
+    
+    --accent: 217 33% 16%;
+    --accent-foreground: 0 0% 98%;
+    
+    --table-border: 217 33% 20%;
+    --table-header: 0 0% 98%;
+    --table-row-alt: 217 33% 14%;
+    
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 211 100% 50%;
+    
+    --popover: 217 33% 12%;
+    --popover-foreground: 0 0% 98%;
+    
+    --destructive: 0 63% 50%;
+    --destructive-foreground: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+  }
+}
+
+@layer components {
+  /* Professional table styling */
+  .data-table {
+    @apply w-full border-collapse bg-card rounded-lg overflow-hidden shadow-sm;
+    min-width: 600px; /* Minimum width for small screens */
+  }
+  
+  .data-table thead {
+    @apply bg-muted;
+  }
+  
+  .data-table th {
+    @apply px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-table-header border-b border-table-border;
+  }
+  
+  .data-table td {
+    @apply px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm border-b border-table-border;
+  }
+  
+  .data-table tbody tr:nth-child(even) {
+    @apply bg-table-row-alt;
+  }
+  
+  .data-table tbody tr {
+    @apply transition-colors hover:bg-muted/50;
+  }
+  
+  /* Input styling */
+  .input-field {
+    @apply w-full px-2 sm:px-3 py-2 text-xs sm:text-sm bg-background border border-input rounded-lg 
+           focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent
+           transition-all duration-200;
+  }
+  
+  /* Button variants */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover 
+           font-medium px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow-sm
+           transition-all duration-200 hover:shadow-md hover:-translate-y-0.5
+           text-sm sm:text-base;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary-hover 
+           font-medium px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl shadow-sm
+           transition-all duration-200 hover:shadow-md hover:-translate-y-0.5
+           text-sm sm:text-base;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground
+           font-medium px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl
+           transition-all duration-200
+           text-sm sm:text-base;
+  }
+  
+  /* Card styling */
+  .card-elevated {
+    @apply bg-card rounded-xl shadow-md p-6 border border-border/50
+           hover:shadow-lg transition-shadow duration-200;
+  }
+}
