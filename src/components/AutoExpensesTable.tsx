@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
-import { Plus, Trash2, Download, Eye } from "lucide-react";
+import { useState, useRef } from "react";
+import { Plus, Trash2, Download, Eye, X, Upload, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import type { AutoExpensesRow } from "@/types";
 import { generateAutoExpensesPDF } from "@/utils/pdfGenerator";
 
@@ -14,33 +15,17 @@ interface AutoExpensesTableProps {
 
 export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
   const [rows, setRows] = useState<AutoExpensesRow[]>([
-    { id: "1", fecha: new Date().toISOString().split('T')[0], tipo: "combustible", descripcion: "", monto: 0, kilometraje: "", nota: "" },
+    { id: "1", fecha: new Date().toISOString().split('T')[0], tipo: "combustible", monto: 0, nota: "", recibos: [] },
   ]);
   const [title, setTitle] = useState("Gastos del Auto");
-  const [subtitle, setSubtitle] = useState("");
-
-  // Limpiar cualquier select abierto al desmontar
-  useEffect(() => {
-    return () => {
-      // Force close any open selects
-      const selects = document.querySelectorAll('[data-radix-popper-content-wrapper]');
-      selects.forEach(select => {
-        const parent = select.parentElement;
-        if (parent && parent.parentElement) {
-          try {
-            parent.parentElement.removeChild(parent);
-          } catch (e) {
-            // Ignorar errores de limpieza
-          }
-        }
-      });
-    };
-  }, []);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingRowId, setEditingRowId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const addRow = () => {
     setRows([
       ...rows,
-      { id: Date.now().toString(), fecha: new Date().toISOString().split('T')[0], tipo: "combustible", descripcion: "", monto: 0, kilometraje: "", nota: "" },
+      { id: Date.now().toString(), fecha: new Date().toISOString().split('T')[0], tipo: "combustible", monto: 0, nota: "", recibos: [] },
     ]);
   };
 
@@ -50,7 +35,7 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
     }
   };
 
-  const updateRow = (id: string, field: keyof AutoExpensesRow, value: string | number) => {
+  const updateRow = (id: string, field: keyof AutoExpensesRow, value: string | number | File[]) => {
     setRows(
       rows.map((row) =>
         row.id === id ? { ...row, [field]: value } : row
@@ -58,15 +43,45 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
     );
   };
 
-  const handlePreview = () => {
-    generateAutoExpensesPDF(rows, title, subtitle, true);
+  const openDialog = (rowId: string) => {
+    setEditingRowId(rowId);
+    setIsDialogOpen(true);
   };
 
-  const handleDownload = () => {
-    generateAutoExpensesPDF(rows, title, subtitle, false);
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setEditingRowId(null);
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (editingRowId && event.target.files) {
+      const files = Array.from(event.target.files);
+      const currentRow = rows.find(r => r.id === editingRowId);
+      const existingRecibos = currentRow?.recibos || [];
+      const newRecibos = [...existingRecibos, ...files];
+      updateRow(editingRowId, "recibos", newRecibos);
+    }
+  };
+
+  const removeReceipt = (rowId: string, index: number) => {
+    const currentRow = rows.find(r => r.id === rowId);
+    if (currentRow && currentRow.recibos) {
+      const updatedRecibos = currentRow.recibos.filter((_, i) => i !== index);
+      updateRow(rowId, "recibos", updatedRecibos);
+    }
+  };
+
+  const handlePreview = async () => {
+    await generateAutoExpensesPDF(rows, title, "", true);
+  };
+
+  const handleDownload = async () => {
+    await generateAutoExpensesPDF(rows, title, "", false);
   };
 
   const totalMonto = rows.reduce((sum, row) => sum + (row.monto || 0), 0);
+
+  const currentEditingRow = editingRowId ? rows.find(r => r.id === editingRowId) : null;
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-6">
@@ -87,31 +102,18 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
           </Button>
         </div>
 
-        {/* Title inputs */}
+        {/* Title input */}
         <Card className="p-4 md:p-6 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-medium text-foreground block mb-2">
-                Título del documento *
-              </label>
-              <Input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ej: Gastos del Auto - Octubre 2025"
-                className="input-field"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium text-foreground block mb-2">
-                Subtítulo (opcional)
-              </label>
-              <Input
-                value={subtitle}
-                onChange={(e) => setSubtitle(e.target.value)}
-                placeholder="Ej: Vehículo Patente ABC123"
-                className="input-field"
-              />
-            </div>
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              Título del documento *
+            </label>
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Ej: Gastos del Auto - Octubre 2025"
+              className="input-field"
+            />
           </div>
         </Card>
 
@@ -121,12 +123,11 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
             <table className="data-table">
               <thead>
                 <tr>
-                  <th className="w-[12%]">Fecha</th>
-                  <th className="w-[15%]">Tipo de Gasto</th>
-                  <th className="w-[25%]">Descripción</th>
-                  <th className="w-[13%]">Monto</th>
-                  <th className="w-[12%]">Kilometraje</th>
-                  <th className="w-[18%]">Nota</th>
+                  <th className="w-[15%]">Fecha</th>
+                  <th className="w-[20%]">Tipo de Gasto</th>
+                  <th className="w-[15%]">Monto</th>
+                  <th className="w-[25%]">Recibos</th>
+                  <th className="w-[20%]">Nota</th>
                   <th className="w-[5%]"></th>
                 </tr>
               </thead>
@@ -142,32 +143,19 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
                       />
                     </td>
                     <td>
-                      <Select
+                      <select
                         value={row.tipo}
-                        onValueChange={(value) => updateRow(row.id, "tipo", value)}
-                        modal={false}
-                      >
-                        <SelectTrigger className="input-field">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent modal={false} className="z-[100]">
-                          <SelectItem value="combustible">Combustible</SelectItem>
-                          <SelectItem value="seguro">Seguro</SelectItem>
-                          <SelectItem value="peaje">Peaje</SelectItem>
-                          <SelectItem value="mantenimiento">Mantenimiento</SelectItem>
-                          <SelectItem value="estacionamiento">Estacionamiento</SelectItem>
-                          <SelectItem value="lavado">Lavado</SelectItem>
-                          <SelectItem value="otros">Otros</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </td>
-                    <td>
-                      <Input
-                        value={row.descripcion}
-                        onChange={(e) => updateRow(row.id, "descripcion", e.target.value)}
-                        placeholder="Detalle del gasto"
+                        onChange={(e) => updateRow(row.id, "tipo", e.target.value)}
                         className="input-field"
-                      />
+                      >
+                        <option value="peaje">Peaje</option>
+                        <option value="combustible">Combustible</option>
+                        <option value="seguro">Seguro</option>
+                        <option value="mantenimiento">Mantenimiento</option>
+                        <option value="estacionamiento">Estacionamiento</option>
+                        <option value="lavado">Lavado</option>
+                        <option value="otros">Otros</option>
+                      </select>
                     </td>
                     <td>
                       <Input
@@ -179,20 +167,15 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
                       />
                     </td>
                     <td>
-                      <Input
-                        value={row.kilometraje}
-                        onChange={(e) => updateRow(row.id, "kilometraje", e.target.value)}
-                        placeholder="Km"
-                        className="input-field"
-                      />
-                    </td>
-                    <td>
-                      <Input
-                        value={row.nota}
-                        onChange={(e) => updateRow(row.id, "nota", e.target.value)}
-                        placeholder="Nota adicional"
-                        className="input-field"
-                      />
+                      <Button
+                        onClick={() => openDialog(row.id)}
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                      >
+                        <ImageIcon className="w-4 h-4 mr-2" />
+                        {row.recibos && row.recibos.length > 0 ? `${row.recibos.length} archivos` : "Adjuntar"}
+                      </Button>
                     </td>
                     <td>
                       <Button
@@ -207,7 +190,7 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
                   </tr>
                 ))}
                 <tr className="font-semibold bg-muted">
-                  <td colSpan={3} className="text-right">Total:</td>
+                  <td colSpan={2} className="text-right">Total:</td>
                   <td className="text-right">$ {totalMonto.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td colSpan={3}></td>
                 </tr>
@@ -232,6 +215,85 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
           </div>
         </Card>
       </div>
+
+      {/* Dialog para adjuntar recibos */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Adjuntar Recibos</DialogTitle>
+            <DialogDescription>
+              Subí imágenes de tickets, facturas o comprobantes para este gasto.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            {/* Input para subir archivos */}
+            <div>
+              <Label htmlFor="file-upload">Seleccionar archivos de imagen</Label>
+              <Input
+                ref={fileInputRef}
+                id="file-upload"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileSelect}
+                className="mt-2"
+              />
+              <p className="text-sm text-muted-foreground mt-2">
+                Puedes seleccionar múltiples archivos a la vez.
+              </p>
+            </div>
+
+            {/* Vista previa de archivos adjuntos */}
+            <div>
+              <Label>Recibos adjuntos ({currentEditingRow?.recibos?.length || 0})</Label>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
+                {currentEditingRow?.recibos?.map((file, index) => (
+                  <div key={index} className="relative group">
+                    <div className="aspect-square rounded-lg border overflow-hidden bg-muted">
+                      {file.type.startsWith('image/') ? (
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`Receipt ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <FileIcon className="w-8 h-8 text-muted-foreground" />
+                        </div>
+                      )}
+                      <button
+                        onClick={() => removeReceipt(currentEditingRow.id, index)}
+                        className="absolute top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1 truncate" title={file.name}>
+                      {file.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              {(!currentEditingRow?.recibos || currentEditingRow.recibos.length === 0) && (
+                <p className="text-sm text-muted-foreground text-center py-8">
+                  No hay recibos adjuntos todavía
+                </p>
+              )}
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button onClick={closeDialog}>Cerrar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
+
+const FileIcon = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+  </svg>
+);

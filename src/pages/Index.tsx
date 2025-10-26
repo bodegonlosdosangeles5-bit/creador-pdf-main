@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ModeSelector } from "@/components/ModeSelector";
 import { InventoryTable } from "@/components/InventoryTable";
 import { PettyCashTable } from "@/components/PettyCashTable";
+import { AutoExpensesTable } from "@/components/AutoExpensesTable";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import type { DataMode } from "@/types";
 
@@ -22,6 +23,10 @@ const Index = () => {
 
   if (mode === "pettycash") {
     return <PettyCashTable onBack={handleBack} />;
+  }
+
+  if (mode === "autoexpenses") {
+    return <AutoExpensesTable onBack={handleBack} />;
   }
 
   return (

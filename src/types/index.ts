@@ -22,10 +22,9 @@ export interface AutoExpensesRow {
   id: string;
   fecha: string;
   tipo: string;
-  descripcion: string;
   monto: number;
-  kilometraje: string;
   nota: string;
+  recibos?: File[]; // Archivos de imágenes adjuntos
 }
 
-export type DataMode = "inventory" | "pettycash";
+export type DataMode = "inventory" | "pettycash" | "autoexpenses";

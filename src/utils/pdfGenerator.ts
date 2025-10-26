@@ -230,7 +230,16 @@ export const generatePettyCashPDF = (
   }
 };
 
-export const generateAutoExpensesPDF = (
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
+
+export const generateAutoExpensesPDF = async (
   rows: AutoExpensesRow[],
   title: string,
   subtitle: string,
@@ -276,9 +285,7 @@ export const generateAutoExpensesPDF = (
     return [
       fecha,
       tipoCapitalized,
-      row.descripcion,
       `$ ${row.monto.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      row.kilometraje,
       row.nota,
     ];
   });
@@ -286,15 +293,13 @@ export const generateAutoExpensesPDF = (
   const totalMonto = rows.reduce((sum, row) => sum + (row.monto || 0), 0);
 
   autoTable(doc, {
-    startY: subtitle ? MARGIN + 15 : MARGIN + 10,
-    head: [["Fecha", "Tipo", "Descripción", "Monto", "Km", "Nota"]],
+    startY: MARGIN + 10,
+    head: [["Fecha", "Tipo", "Monto", "Nota"]],
     body: tableData,
     foot: [[
       "",
-      "",
       "Total:",
       `$ ${totalMonto.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      "",
       "",
     ]],
     theme: "grid",
@@ -316,13 +321,123 @@ export const generateAutoExpensesPDF = (
       fontStyle: "bold",
     },
     columnStyles: {
-      3: { halign: "right" }, // Monto
+      2: { halign: "right" }, // Monto
     },
     alternateRowStyles: {
       fillColor: [249, 250, 251],
     },
     margin: { left: MARGIN, right: MARGIN },
   });
+
+  // Add receipt images if any row has receipts
+  const rowsWithReceipts = rows.filter(row => row.recibos && row.recibos.length > 0);
+  
+  if (rowsWithReceipts.length > 0) {
+    let currentY = doc.lastAutoTable.finalY || MARGIN + 50;
+    let hasImagesAdded = false;
+    
+    for (const row of rowsWithReceipts) {
+      if (!row.recibos || row.recibos.length === 0) continue;
+      
+      // Check if we need a new page
+      if (currentY > A4_HEIGHT - 80) {
+        doc.addPage();
+        currentY = MARGIN;
+      }
+      
+      // Add section title
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${row.tipo.charAt(0).toUpperCase() + row.tipo.slice(1)}`, MARGIN, currentY + 8);
+      currentY += 5;
+      
+      // Add images in a grid layout (2 columns)
+      const imageSpacing = 5; // mm between images
+      const imagesPerRow = 2;
+      const maxImageWidth = (A4_WIDTH - (MARGIN * 2) - imageSpacing) / imagesPerRow;
+      const maxImageHeight = 45; // max height per image in a row
+      
+      const imageFiles = row.recibos.filter(file => file.type.startsWith('image/'));
+      let imagePositionY = currentY;
+      let colPos = 0; // Current column (0 or 1)
+      
+      for (let i = 0; i < imageFiles.length; i++) {
+        const file = imageFiles[i];
+        
+        try {
+          const imageData = await fileToBase64(file);
+          
+          // Calculate which row this image belongs to
+          const rowIndex = Math.floor(i / imagesPerRow);
+          const currentRowY = imagePositionY + (rowIndex * (maxImageHeight + imageSpacing));
+          
+          // Check if we need a new page
+          if (currentRowY > A4_HEIGHT - 80) {
+            doc.addPage();
+            // Reset to start of new page
+            const newRowIndex = Math.floor((i - Math.floor(i / imagesPerRow) * imagesPerRow) / imagesPerRow);
+            imagePositionY = MARGIN;
+            colPos = 0;
+          }
+          
+          // Get image dimensions
+          const img = new Image();
+          img.src = imageData;
+          
+          // Wait for image to load
+          await new Promise((resolve) => {
+            img.onload = resolve;
+          });
+          
+          // Calculate dimensions to fit while maintaining aspect ratio
+          let imgWidth = img.width;
+          let imgHeight = img.height;
+          
+          // Calculate scaling to fit within max dimensions
+          const widthRatio = maxImageWidth / imgWidth;
+          const heightRatio = maxImageHeight / imgHeight;
+          const ratio = Math.min(widthRatio, heightRatio);
+          
+          imgWidth = imgWidth * ratio;
+          imgHeight = imgHeight * ratio;
+          
+          // Calculate position for this image
+          const currentRowYPos = imagePositionY + (rowIndex * (maxImageHeight + imageSpacing));
+          const xPos = MARGIN + ((i % imagesPerRow) * (maxImageWidth + imageSpacing));
+          const yPos = currentRowYPos;
+          
+          // Add image to PDF
+          doc.addImage(imageData, 'JPEG', xPos, yPos, imgWidth, imgHeight, undefined, 'FAST');
+          hasImagesAdded = true;
+          
+        } catch (error) {
+          console.error('Error adding image:', error);
+          // Continue with next image
+        }
+      }
+      
+      // Update currentY for next section
+      const totalRows = Math.ceil(imageFiles.length / imagesPerRow);
+      currentY = imagePositionY + (totalRows * (maxImageHeight + imageSpacing));
+    }
+    
+    // If no images were added but there were files, at least show a note
+    if (!hasImagesAdded && rowsWithReceipts.length > 0) {
+      if (currentY > A4_HEIGHT - 60) {
+        doc.addPage();
+        currentY = MARGIN;
+      }
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text("Recibos adjuntos:", MARGIN, currentY + 5);
+      rowsWithReceipts.forEach((row) => {
+        doc.setFontSize(9);
+        doc.setFont("helvetica", "normal");
+        currentY += 5;
+        doc.text(`• ${row.tipo.charAt(0).toUpperCase() + row.tipo.slice(1)}: ${row.recibos!.length} archivo(s)`, MARGIN + 3, currentY);
+      });
+    }
+  }
 
   // Footer
   const pageCount = doc.getNumberOfPages();
