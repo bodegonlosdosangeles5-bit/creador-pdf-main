@@ -83,7 +83,7 @@ export const PettyCashTable = ({ onBack }: PettyCashTableProps) => {
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-6">
-      <ThemeToggle />
+      <ThemeToggle position="center" />
       <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
