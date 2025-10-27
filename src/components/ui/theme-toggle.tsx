@@ -23,13 +23,13 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className={`fixed top-4 left-1/2 -translate-x-1/2 md:top-6 z-50 shadow-lg ${className}`}
+      className={`fixed top-4 left-1/2 -translate-x-1/2 md:top-6 z-50 shadow-lg bg-card border border-border ${className}`}
     >
-      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-foreground" />
+      <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-foreground" />
       <span className="sr-only">Toggle theme</span>
     </Button>
   );

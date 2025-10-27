@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { InventoryRow } from "@/types";
 import { generateInventoryPDF } from "@/utils/pdfGenerator";
+import { showToast } from "@/utils/showToast";
 
 interface InventoryTableProps {
   onBack: () => void;
@@ -17,6 +19,7 @@ export const InventoryTable = ({ onBack }: InventoryTableProps) => {
   ]);
   const [title, setTitle] = useState("Inventario General");
   const [subtitle, setSubtitle] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const addRow = () => {
     setRows([
@@ -40,11 +43,27 @@ export const InventoryTable = ({ onBack }: InventoryTableProps) => {
   };
 
   const handlePreview = () => {
-    generateInventoryPDF(rows, title, subtitle, true);
+    try {
+      setIsGenerating(true);
+      generateInventoryPDF(rows, title, subtitle, true);
+      showToast.success("✅ PDF generado con éxito");
+    } catch (error) {
+      showToast.error("⚠️ Error al exportar PDF");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleDownload = () => {
-    generateInventoryPDF(rows, title, subtitle, false);
+    try {
+      setIsGenerating(true);
+      generateInventoryPDF(rows, title, subtitle, false);
+      showToast.success("✅ PDF descargado con éxito");
+    } catch (error) {
+      showToast.error("⚠️ Error al exportar PDF");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const totalCantidad = rows.reduce((sum, row) => sum + (row.cantidad || 0), 0);
@@ -52,7 +71,7 @@ export const InventoryTable = ({ onBack }: InventoryTableProps) => {
   return (
     <div className="min-h-screen bg-background p-4 md:p-6">
       <ThemeToggle />
-      <div className="max-w-7xl mx-auto space-y-4 md:space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
@@ -69,7 +88,7 @@ export const InventoryTable = ({ onBack }: InventoryTableProps) => {
         </div>
 
         {/* Title input */}
-        <Card className="p-4 md:p-6">
+        <Card className="p-6 md:p-8">
           <div>
             <label className="text-sm font-medium text-foreground block mb-2">
               Título del documento *
@@ -84,7 +103,7 @@ export const InventoryTable = ({ onBack }: InventoryTableProps) => {
         </Card>
 
         {/* Table */}
-        <Card className="p-4 md:p-6">
+        <Card className="p-6 md:p-8">
           <div className="overflow-x-auto -mx-2 px-2">
             <table className="data-table">
               <thead>
@@ -163,16 +182,16 @@ export const InventoryTable = ({ onBack }: InventoryTableProps) => {
           </div>
 
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 mt-6">
-            <Button onClick={addRow} className="btn-outline w-full sm:w-auto">
+            <Button onClick={addRow} className="btn-outline w-full sm:w-auto" disabled={isGenerating}>
               <Plus className="w-4 h-4 mr-2" />
               Agregar fila
             </Button>
-            <Button onClick={handlePreview} className="btn-primary w-full sm:w-auto">
+            <Button onClick={handlePreview} className="btn-primary w-full sm:w-auto" disabled={isGenerating}>
               <Eye className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Vista previa A4</span>
               <span className="sm:hidden">Vista previa</span>
             </Button>
-            <Button onClick={handleDownload} className="btn-secondary w-full sm:w-auto">
+            <Button onClick={handleDownload} className="btn-secondary w-full sm:w-auto" disabled={isGenerating}>
               <Download className="w-4 h-4 mr-2" />
               Descargar PDF
             </Button>

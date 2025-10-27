@@ -14,6 +14,14 @@ export default {
     },
     extend: {
       colors: {
+        slateBg: "#0B1120",
+        cardColor: "#141B2D",
+        borderColor: "#2A3245",
+        textColor: "#E2E8F0",
+        textMuted: "#8B9BB0",
+        primaryColor: "#2563EB",
+        purpleColor: "#8B5CF6",
+        roseColor: "#F43F5E",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -56,8 +64,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Outfit', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['Outfit', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -85,6 +93,9 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      boxShadow: {
+        'elev': '0 4px 20px rgba(0,0,0,0.2)',
       },
     },
   },

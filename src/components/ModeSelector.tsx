@@ -1,81 +1,69 @@
-import { Package, Wallet, Car } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { FileText, Wallet, Car } from "lucide-react";
+import { motion } from "framer-motion";
+import { FeatureCard } from "@/components/FeatureCard";
 
 interface ModeSelectorProps {
   onSelectMode: (mode: "inventory" | "pettycash" | "autoexpenses") => void;
 }
 
 export const ModeSelector = ({ onSelectMode }: ModeSelectorProps) => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4 md:p-6">
+    <div className="min-h-screen bg-[color:var(--bg)] flex items-center justify-center p-4 md:p-6">
       <div className="w-full max-w-5xl">
-        <div className="text-center mb-8 md:mb-12">
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
+        <motion.div 
+          className="text-center mb-8 md:mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[color:var(--text)] mb-4">
             Creador de PDF
           </h1>
-          <p className="text-muted-foreground text-base md:text-lg">
+          <p className="text-[color:var(--text-muted)] text-base md:text-lg">
             Seleccioná el tipo de documento que querés gestionar
           </p>
-        </div>
+        </motion.div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
-          <Card
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 max-w-6xl mx-auto"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <FeatureCard
+            icon={FileText}
+            title="GENERADOR DE REPORTE"
+            description="Gestioná lotes, productos y cantidades con exportación a PDF profesional"
             onClick={() => onSelectMode("inventory")}
-            className="card-elevated cursor-pointer group hover:scale-[1.02] transition-transform duration-200"
-          >
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <Package className="w-8 h-8 md:w-10 md:h-10 text-primary" />
-              </div>
-              <div>
-                <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-2">
-                  GENERADOR DE REPORTE
-                </h2>
-                <p className="text-muted-foreground text-sm md:text-base">
-                  Gestioná lotes, productos y cantidades con exportación a PDF profesional
-                </p>
-              </div>
-            </div>
-          </Card>
+            delay={0.1}
+          />
 
-          <Card
+          <FeatureCard
+            icon={Wallet}
+            title="Caja Chica"
+            description="Registrá ingresos, egresos y controlá el saldo automáticamente"
             onClick={() => onSelectMode("pettycash")}
-            className="card-elevated cursor-pointer group hover:scale-[1.02] transition-transform duration-200"
-          >
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
-                <Wallet className="w-8 h-8 md:w-10 md:h-10 text-secondary" />
-              </div>
-              <div>
-                <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-2">
-                  Caja Chica
-                </h2>
-                <p className="text-muted-foreground text-sm md:text-base">
-                  Registrá ingresos, egresos y controlá el saldo automáticamente
-                </p>
-              </div>
-            </div>
-          </Card>
+            delay={0.2}
+          />
 
-          <Card
+          <FeatureCard
+            icon={Car}
+            title="Gastos del Auto"
+            description="Gestioná gastos con posibilidad de adjuntar recibos e imágenes"
             onClick={() => onSelectMode("autoexpenses")}
-            className="card-elevated cursor-pointer group hover:scale-[1.02] transition-transform duration-200"
-          >
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
-                <Car className="w-8 h-8 md:w-10 md:h-10 text-purple-600" />
-              </div>
-              <div>
-                <h2 className="font-display text-xl md:text-2xl font-bold text-foreground mb-2">
-                  Gastos del Auto
-                </h2>
-                <p className="text-muted-foreground text-sm md:text-base">
-                  Gestioná gastos con posibilidad de adjuntar recibos e imágenes
-                </p>
-              </div>
-            </div>
-          </Card>
-        </div>
+            delay={0.3}
+          />
+        </motion.div>
       </div>
     </div>
   );

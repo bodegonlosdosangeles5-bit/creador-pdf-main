@@ -1,11 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Creador de PDF</title>
     <meta name="description" content="Aplicación profesional para gestión de inventario y caja chica con exportación a PDF. Diseñada para Argentina." />
     <meta name="author" content="Creador de PDF" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2563EB" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Creador PDF" />
+    <link rel="apple-touch-icon" href="/icon-192x192.png" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.webmanifest" />
 
     <meta property="og:title" content="Creador de PDF - Gestión Profesional" />
     <meta property="og:description" content="Sistema completo de gestión de inventario y caja chica con exportación a PDF" />
@@ -19,12 +30,10 @@
 
   <body>
     <script>
-      // Evita el flash de color al cargar
+      // Aplica el tema según la preferencia guardada o default light
       (function() {
-        const theme = localStorage.getItem('theme');
-        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-        }
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.classList.toggle('dark', theme === 'dark');
       })();
     </script>
     <div id="root"></div>
