@@ -222,25 +222,25 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
           <DialogHeader>
             <DialogTitle>Adjuntar Recibos</DialogTitle>
             <DialogDescription>
-              Subí imágenes de tickets, facturas o comprobantes para este gasto.
+              Subí imágenes o archivos PDF de tickets, facturas o comprobantes para este gasto.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             {/* Input para subir archivos */}
             <div>
-              <Label htmlFor="file-upload">Seleccionar archivos de imagen</Label>
+              <Label htmlFor="file-upload">Seleccionar archivos (imágenes o PDFs)</Label>
               <Input
                 ref={fileInputRef}
                 id="file-upload"
                 type="file"
-                accept="image/*"
+                accept="image/*,application/pdf"
                 multiple
                 onChange={handleFileSelect}
                 className="mt-2"
               />
               <p className="text-sm text-muted-foreground mt-2">
-                Puedes seleccionar múltiples archivos a la vez.
+                Puedes seleccionar múltiples archivos a la vez. Se aceptan imágenes y archivos PDF.
               </p>
             </div>
 
@@ -257,6 +257,13 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
                           alt={`Receipt ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
+                      ) : (file.type === 'application/pdf' || 
+                            file.type === 'application/x-pdf' ||
+                            file.name.toLowerCase().endsWith('.pdf')) ? (
+                        <div className="w-full h-full flex flex-col items-center justify-center p-4">
+                          <FileIcon className="w-12 h-12 text-red-500 mb-2" />
+                          <span className="text-xs font-medium text-foreground">PDF</span>
+                        </div>
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <FileIcon className="w-8 h-8 text-muted-foreground" />
