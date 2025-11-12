@@ -280,7 +280,6 @@ export const generateAutoExpensesPDF = async (
       fecha,
       tipoCapitalized,
       `$ ${row.monto.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      row.nota,
     ];
   });
 
@@ -288,13 +287,12 @@ export const generateAutoExpensesPDF = async (
 
   autoTable(doc, {
     startY: MARGIN + 10,
-    head: [["Fecha", "Tipo", "Monto", "Nota"]],
+    head: [["Fecha", "Tipo", "Monto"]],
     body: tableData,
     foot: [[
       "",
       "Total:",
       `$ ${totalMonto.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-      "",
     ]],
     theme: "grid",
     styles: {
@@ -339,21 +337,15 @@ export const generateAutoExpensesPDF = async (
         currentY = MARGIN;
       }
       
-      // Add section title
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "bold");
-      doc.text(`${row.tipo.charAt(0).toUpperCase() + row.tipo.slice(1)}`, MARGIN, currentY + 8);
-      currentY += 5;
-      
-      // Add images and PDFs in a grid layout (4 columns)
-      const imageSpacing = 3; // mm between images
-      const imagesPerRow = 4;
+      // Add images and PDFs in a grid layout (3 columns for better readability)
+      const imageSpacing = 4; // mm between images
+      const imagesPerRow = 3;
       const maxImageWidth = (A4_WIDTH - (MARGIN * 2) - (imageSpacing * (imagesPerRow - 1))) / imagesPerRow;
-      const maxImageHeight = 40; // max height per image in a row
+      const maxImageHeight = 60; // max height per image in a row (increased for better readability)
       
       const allFiles = row.recibos; // Process all files (images and PDFs)
       let imagePositionY = currentY;
-      let colPos = 0; // Current column (0, 1, 2, or 3)
+      let colPos = 0; // Current column (0, 1, or 2)
       
       for (let i = 0; i < allFiles.length; i++) {
         const file = allFiles[i];

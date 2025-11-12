@@ -246,15 +246,15 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
 
             {/* Vista previa de archivos adjuntos */}
             <div>
-              <Label>Recibos adjuntos ({currentEditingRow?.recibos?.length || 0})</Label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
+              <p className="text-sm font-medium mb-4">Archivos ({currentEditingRow?.recibos?.length || 0})</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {currentEditingRow?.recibos?.map((file, index) => (
                   <div key={index} className="relative group">
                     <div className="aspect-square rounded-lg border overflow-hidden bg-muted">
                       {file.type.startsWith('image/') ? (
                         <img
                           src={URL.createObjectURL(file)}
-                          alt={`Receipt ${index + 1}`}
+                          alt=""
                           className="w-full h-full object-cover"
                         />
                       ) : (file.type === 'application/pdf' || 
@@ -276,9 +276,6 @@ export const AutoExpensesTable = ({ onBack }: AutoExpensesTableProps) => {
                         <X className="w-4 h-4" />
                       </button>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1 truncate" title={file.name}>
-                      {file.name}
-                    </p>
                   </div>
                 ))}
               </div>
