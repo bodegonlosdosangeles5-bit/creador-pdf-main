@@ -8,109 +8,113 @@
 
 @layer base {
   :root {
-    /* Light mode - Professional & Clean */
-    --bg: #F8FAFC;
+    /* Light mode - Pure White & High Contrast */
+    --bg: #FFFFFF;
     --card: #FFFFFF;
-    --border: #E2E8F0;
-    --text: #1E293B;
-    --text-muted: #64748B;
+    --border: #E5E7EB;
+    --text: #000000;
+    --text-muted: #4B5563;
     --primary: #2563EB;
-    --purple: #8B5CF6;
-    --rose: #F43F5E;
-    
-    /* Primary - Bright Blue (#2563EB) */
-    --primary: 217 92% 59%;
-    --primary-foreground: 210 20% 98%;
-    --primary-hover: 217 92% 50%;
-    
-    /* Secondary - Vibrant Purple (#8B5CF6) */
-    --secondary: 258 90% 66%;
-    --secondary-foreground: 210 20% 98%;
-    --secondary-hover: 258 90% 60%;
-    
-    /* Backgrounds - Light gray (#F8FAFC) */
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
-    
+    --purple: #7C3AED;
+    --rose: #EF4444;
+
+    /* Primary - Blue 600 (#2563EB) */
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 221 83% 45%;
+
+    /* Secondary - Violet 600 (#7C3AED) */
+    --secondary: 262 83% 58%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 262 83% 50%;
+
+    /* Backgrounds - Pure White (#FFFFFF) */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+
     /* Cards - White (#FFFFFF) */
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-    
+    --card-foreground: 0 0% 0%;
+
     /* Muted & Accents */
     --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    
-    --accent: 258 90% 66%;
-    --accent-foreground: 210 20% 98%;
-    
+    --muted-foreground: 215 25% 40%;
+
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+
     /* Table specific */
-    --table-border: 214 32% 91%;
+    --table-border: 220 13% 91%;
     --table-header: 222 47% 11%;
-    --table-row-alt: 210 40% 96%;
-    
-    /* Inputs & Borders (#E2E8F0) */
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 217 92% 59%;
-    
+    --table-row-alt: 210 40% 98%;
+
+    /* Inputs & Borders (#E5E7EB) */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 221 83% 53%;
+
     /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    
-    /* Destructive - Rose accent (#F43F5E) */
-    --destructive: 347 77% 50%;
-    --destructive-foreground: 210 20% 98%;
-    
+    --popover-foreground: 0 0% 0%;
+
+    /* Destructive - Red 500 (#EF4444) */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-    
+
     /* Border radius */
-    --radius: 0.75rem;
-    --radius-sm: 0.5rem;
-    --radius-lg: 1rem;
-    
+    --radius: 0.5rem;
+    --radius-sm: 0.3rem;
+    --radius-lg: 0.8rem;
+
     /* Transitions */
     --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
-    /* Dark mode - Notion/Linear style */
-    --bg: #0B1120;
-    --card: #141B2D;
-    --border: #2A3245;
-    --text: #E2E8F0;
-    --text-muted: #8B9BB0;
-    --primary: #2563EB;
-    --purple: #8B5CF6;
-    --rose: #F43F5E;
-    
-    /* Backgrounds - Deep dark (#0B1120) */
-    --background: 218 40% 8%;
-    --foreground: 210 13% 88%;
-    
-    /* Cards - Dark blue-gray (#141B2D) */
-    --card: 218 28% 16%;
-    --card-foreground: 210 13% 88%;
-    
+    /* Dark mode - Zinc Gray Professional */
+    --bg: #18181B;
+    --card: #27272A;
+    --border: #3F3F46;
+    --text: #FAFAFA;
+    --text-muted: #A1A1AA;
+    --primary: #3B82F6;
+    /* Blue 500 for visibility on dark */
+    --purple: #A78BFA;
+    --rose: #FB7185;
+
+    /* Backgrounds - Zinc 950 (#18181B) */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    /* Cards - Zinc 800 (#27272A) */
+    --card: 240 3.7% 15.9%;
+    --card-foreground: 0 0% 98%;
+
     /* Muted & Accents */
-    --muted: 218 28% 20%;
-    --muted-foreground: 215 20% 57%;
-    
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+
     /* Table specific */
-    --table-border: 216 18% 25%;
-    --table-header: 210 13% 88%;
-    --table-row-alt: 218 28% 18%;
-    
-    /* Inputs & Borders (#2A3245) */
-    --border: 216 18% 25%;
-    --input: 216 18% 25%;
-    
+    --table-border: 240 3.7% 15.9%;
+    --table-header: 0 0% 98%;
+    --table-row-alt: 240 5.9% 10%;
+
+    /* Inputs & Borders (#3F3F46) */
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+
     /* Popover */
-    --popover: 218 28% 16%;
-    --popover-foreground: 210 13% 88%;
-    
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
@@ -129,105 +133,103 @@
     color: var(--text);
     font-family: 'Inter', system-ui, sans-serif;
   }
-  
-  h1, .h1 {
+
+  h1,
+  .h1 {
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
     letter-spacing: -0.02em;
   }
-  
-  h2, h3, h4, h5, h6 {
+
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
   }
 }
 
 @layer components {
+
   /* Professional table styling */
   .data-table {
     @apply w-full border-collapse rounded-lg overflow-hidden shadow-md;
     min-width: 600px;
     background: hsl(var(--card));
   }
-  
+
   .data-table thead {
     background: linear-gradient(135deg, hsl(var(--muted)), hsl(var(--muted) / 0.5));
   }
-  
+
   .data-table th {
     @apply px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-semibold text-table-header border-b border-table-border;
     color: hsl(var(--foreground));
   }
-  
+
   .data-table td {
     @apply px-2 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm border-b border-table-border;
   }
-  
+
   .data-table tbody tr:nth-child(even) {
     background: hsl(var(--table-row-alt));
   }
-  
+
   .data-table tbody tr {
     @apply transition-all duration-200;
   }
-  
+
   .data-table tbody tr:hover {
     background: hsl(var(--muted) / 0.3);
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   }
-  
+
   /* Input styling */
   .input-field {
-    @apply w-full px-2 sm:px-3 py-2 text-xs sm:text-sm border rounded-lg 
-           focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent
-           transition-all duration-200;
+    @apply w-full px-2 sm:px-3 py-2 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200;
     background: hsl(var(--card));
     border-color: hsl(var(--input));
     color: hsl(var(--foreground));
   }
-  
+
   .input-field:focus {
     border-color: hsl(var(--primary));
   }
-  
+
   /* Button variants with gradients */
   .btn-primary {
-    @apply font-medium px-5 py-2.5 rounded-2xl 
-           transition-all duration-200 hover:-translate-y-1 hover:shadow-lg active:scale-95
-           text-sm sm:text-base;
+    @apply font-medium px-5 py-2.5 rounded-2xl transition-all duration-200 hover:-translate-y-1 hover:shadow-lg active:scale-95 text-sm sm:text-base;
     background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
     color: hsl(var(--primary-foreground));
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
-  
+
   .btn-secondary {
-    @apply font-medium px-5 py-2.5 rounded-2xl 
-           transition-all duration-200 hover:-translate-y-1 hover:shadow-lg active:scale-95
-           text-sm sm:text-base;
+    @apply font-medium px-5 py-2.5 rounded-2xl transition-all duration-200 hover:-translate-y-1 hover:shadow-lg active:scale-95 text-sm sm:text-base;
     background: hsl(var(--secondary));
     color: hsl(var(--secondary-foreground));
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
-  
+
   .btn-secondary:hover {
     background: hsl(var(--secondary-hover));
   }
-  
+
   .btn-outline {
-    @apply border-2 font-medium px-5 py-2.5 rounded-2xl
-           transition-all duration-200 hover:-translate-y-1 hover:shadow-lg active:scale-95
-           text-sm sm:text-base;
+    @apply border-2 font-medium px-5 py-2.5 rounded-2xl transition-all duration-200 hover:-translate-y-1 hover:shadow-lg active:scale-95 text-sm sm:text-base;
     border-color: hsl(var(--primary));
     color: hsl(var(--primary));
     background: transparent;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
-  
+
   .btn-outline:hover {
     background: hsl(var(--primary) / 0.1);
   }
-  
+
   /* Card styling with subtle gradients */
   .card-elevated {
     @apply rounded-2xl transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
@@ -235,7 +237,7 @@
     border: 1px solid var(--border);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
-  
+
   /* Increased spacing for better visual breathing room */
   .section-spacing {
     @apply space-y-6 sm:space-y-8;

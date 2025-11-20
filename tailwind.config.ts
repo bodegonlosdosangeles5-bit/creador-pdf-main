@@ -14,11 +14,6 @@ export default {
     },
     extend: {
       colors: {
-        slateBg: "#0B1120",
-        cardColor: "#141B2D",
-        borderColor: "#2A3245",
-        textColor: "#E2E8F0",
-        textMuted: "#8B9BB0",
         primaryColor: "#2563EB",
         purpleColor: "#8B5CF6",
         roseColor: "#F43F5E",

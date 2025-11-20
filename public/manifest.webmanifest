@@ -1,0 +1,17 @@
+{
+    "name": "Creador de PDF",
+    "short_name": "Creador PDF",
+    "description": "Aplicación profesional para gestión de inventario y caja chica con exportación a PDF.",
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

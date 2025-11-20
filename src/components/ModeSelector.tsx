@@ -18,13 +18,13 @@ export const ModeSelector = ({ onSelectMode }: ModeSelectorProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="min-h-screen bg-[color:var(--bg)] relative overflow-hidden transition-colors duration-300">
       {/* Fondo con movimiento sutil para profundidad */}
       <motion.div
         initial={{ scale: 1.2, opacity: 0.4 }}
         animate={{ scale: 1, opacity: 0.6 }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", repeatType: "mirror" }}
-        className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-neutral-800 via-black to-neutral-900 transform-gpu will-change-transform"
+        className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 transform-gpu will-change-transform"
         style={{ perspective: 1000 }}
       />
 
