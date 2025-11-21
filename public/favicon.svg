@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="pdfGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563EB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Document background -->
+  <rect x="6" y="2" width="20" height="28" rx="2" fill="url(#pdfGradient)"/>
+  
+  <!-- Document fold -->
+  <path d="M 22 2 L 22 8 L 26 8 L 26 6 Z" fill="#1e40af" opacity="0.7"/>
+  
+  <!-- PDF text -->
+  <text x="16" y="20" font-family="Arial, sans-serif" font-size="8" font-weight="bold" text-anchor="middle" fill="white">PDF</text>
+  
+  <!-- Lines representing document content -->
+  <rect x="9" y="10" width="14" height="1.5" rx="0.5" fill="white" opacity="0.6"/>
+  <rect x="9" y="23" width="10" height="1" rx="0.5" fill="white" opacity="0.5"/>
+  <rect x="9" y="26" width="12" height="1" rx="0.5" fill="white" opacity="0.5"/>
+</svg>
